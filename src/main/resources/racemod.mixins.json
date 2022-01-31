@@ -4,11 +4,14 @@
   "package": "io.github.marinersfan824.racemod.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "EndPortalRoomMixin",
     "EyeOfEnderMixin",
     "LakesMixin",
+    "LevelPropertiesMixin",
     "MobDropsMixin",
     "RavineMixin",
-    "LevelPropertiesMixin"
+    "SpiralStaircaseMixin",
+    "StartPieceMixin"
   ],
   "client": [
   ],
