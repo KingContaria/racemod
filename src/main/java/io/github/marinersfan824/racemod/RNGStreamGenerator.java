@@ -1,5 +1,8 @@
 package io.github.marinersfan824.racemod;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.world.World;
 import net.minecraft.world.level.LevelProperties;
 
 import java.util.HashMap;
@@ -82,6 +85,50 @@ public class RNGStreamGenerator {
         long ret = Math.abs((int)this.featherSeed) % (int)Math.pow(16.0D, 5.0D);
         this.featherSeed = stream.nextLong();
         return ret;
+    }
+    public static void tellPlayerRates(World world) {
+        long seed = world.getSeed();
+        RNGStreamGenerator dummy = new RNGStreamGenerator();
+        dummy.initializeBlazeRodSeed(seed);
+        dummy.initializeEyeSeed(seed);
+        dummy.initializeFeatherSeed(seed);
+        dummy.initializePearlSeed(seed);
+
+        int total_blazerods = 0;
+        int total_blazes = 0;
+        int total_pearls = 0;
+        int total_endermen = 0;
+        int broken_eyes = 0;
+        int total_eyes = 0;
+        while (total_blazerods < 7) {
+            int seedResult = Math.abs((int)dummy.updateAndGetBlazeRodSeed()) % (int)Math.pow(16.0D, 4.0D);
+            boolean didPass = (seedResult % 16 < 8);
+            if (didPass) {
+                total_blazerods++;
+            }
+            total_blazes++;
+        }
+        while (total_pearls < 14) {
+            int seedResult = Math.abs((int)dummy.updateAndGetEnderPearlSeed()) % (int)Math.pow(16.0D, 4.0D);
+            boolean didPass = (seedResult % 16 < 10);
+            if (didPass) {
+                total_pearls++;
+            }
+            total_endermen++;
+        }
+        while (total_eyes < 5) {
+            int seedResult = Math.abs((int)dummy.updateAndGetEnderEyeSeed()) % (int)Math.pow(16.0D, 4.0D);
+            boolean didPass = (seedResult % 5 > 0);
+            if (!didPass) {
+                broken_eyes++;
+            }
+            total_eyes++;
+        }
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        player.sendChatMessage(String.format("Blaze rates are %d/%d, Endermen "
+                        + "rates are %d/%d, eye breaks are %d/%d",
+                total_blazerods, total_blazes, total_pearls, total_endermen, broken_eyes, total_eyes));
+        world.playSound(player.x, player.y, player.z, "ambient.weather.thunder", 10000.0F, 0.8F + 0.2F);
     }
 
     public long getEnderEyeSeed() {
