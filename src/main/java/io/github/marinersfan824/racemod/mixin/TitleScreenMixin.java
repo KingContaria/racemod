@@ -18,6 +18,7 @@ public abstract class TitleScreenMixin {
         String[] splashes = {"Don't bridge with sand!",
                 "Doug has plot armor!",
                 "Shh! Illumina doesn't know ledge yet!",
+                "What's in your arsenal?",
                 "Fall tower is not better!",
                 "Boat is meta.",
                 "One quadrant that I can dig in!",
