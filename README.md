@@ -5,8 +5,8 @@ A 1.7 and 1.8 tournament mod that makes major sources of RNG consistent between 
 - Blaze rod drops are standardised
 - Feathers from chickens are standardised
 - Eye break rng is standardised
-- Eyes of ender always point towards the portal room (1.8 only, couldn't get it to work in 1.7)
+- Eyes of ender always point towards the portal room
 - All ravines are removed
 - All water and lava lakes below y60 are removed
 
-You need legacy fabric to use this so yeah
+This mod requires Legacy Fabric 0.12.12+.
