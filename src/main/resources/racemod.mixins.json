@@ -7,13 +7,13 @@
     "BedrockDropMixin",
     "EndPortalRoomMixin",
     "EyeOfEnderMixin",
-    "TitleScreenMixin",
     "LakesMixin",
     "LevelPropertiesMixin",
     "MobDropsMixin",
     "RavineMixin",
     "SpiralStaircaseMixin",
-    "StartPieceMixin"
+    "StartPieceMixin",
+    "TitleScreenMixin"
   ],
   "client": [
   ],
