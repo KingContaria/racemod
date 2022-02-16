@@ -15,7 +15,7 @@ public class EndPortalRoomMixin {
     @Inject(method="fillOpenings",at=@At("TAIL"))
     private void onFillOpenings(StructurePiece start, List<StructurePiece> pieces, Random random, CallbackInfo ci){
         if(start!=null){
-            ((ISpiralStaircase)start).setPortalRoomPos(((StructurePiece)(Object)this).getCenterBlockPos());
+            ((ISpiralStaircase)start).setPortalRoomBox(((StructurePiece)(Object)this).getBoundingBox());
         }
     }
 }
