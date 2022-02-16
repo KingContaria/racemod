@@ -2,28 +2,15 @@ package io.github.marinersfan824.racemod;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraft.world.level.LevelProperties;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public class RNGStreamGenerator {
-    private static HashMap<String, RNGStreamGenerator> instances = new HashMap<>();
     private long enderEyeSeed;
     private long enderPearlSeed;
     private long blazeRodSeed;
     private long featherSeed;
-
-    public static RNGStreamGenerator getInstance(String id) {
-        if (!instances.containsKey(id)) {
-            instances.put(id, new RNGStreamGenerator());
-        }
-        return instances.get(id);
-    }
 
     public void initializeEyeSeed(long worldSeed) {
         long seed = worldSeed ^ 0x99A2B75BBL;
