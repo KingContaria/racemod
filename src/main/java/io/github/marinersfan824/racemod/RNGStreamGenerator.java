@@ -75,9 +75,8 @@ public class RNGStreamGenerator {
         this.featherSeed = stream.nextLong();
         return ret;
     }
-    public static void tellPlayerRates(World world) {
+    public static void tellPlayerInitialRates(World world) {
         long worldSeed = world.getSeed();
-        System.out.println(worldSeed);
         RNGStreamGenerator dummy = new RNGStreamGenerator();
         dummy.initializeBlazeRodSeed(worldSeed);
         dummy.initializeEyeSeed(worldSeed);
@@ -116,10 +115,56 @@ public class RNGStreamGenerator {
             total_eyes++;
         }
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        player.sendChatMessage(String.format("Blaze rates are %d/%d, Endermen "
+        player.sendChatMessage(String.format("Initial rates on this seed: Blaze rates are %d/%d, Endermen "
                         + "rates are %d/%d, eye breaks are %d/%d",
                 total_blazerods, total_blazes, total_pearls, total_endermen, broken_eyes, total_eyes));
         world.playSound(player.x, player.y, player.z, "ambient.weather.thunder", 100.0F, 10.0F);
+    }
+
+    public static void tellPlayerCurrentRates(World world) {
+        long worldSeed = world.getSeed();
+        RNGStreamGenerator dummy = new RNGStreamGenerator();
+        RNGStreamGenerator main = ((ILevelProperties)world.getLevelProperties()).getRngStreamGenerator();
+        dummy.blazeRodSeed = main.getBlazeRodSeed();
+        dummy.enderEyeSeed = main.getEnderEyeSeed();
+        dummy.enderPearlSeed = main.getEnderPearlSeed();
+        dummy.featherSeed = main.getFeatherSeed();
+        int total_blazerods = 0;
+        int total_blazes = 0;
+        int total_pearls = 0;
+        int total_endermen = 0;
+        int broken_eyes = 0;
+        int total_eyes = 0;
+
+        while (total_blazerods < 7) {
+            int seedResult = Math.abs((int)dummy.updateAndGetBlazeRodSeed());
+            boolean didPass = (seedResult % 16 < 8);
+            if (didPass) {
+                total_blazerods++;
+            }
+            total_blazes++;
+        }
+        while (total_pearls < 14) {
+            int seedResult = Math.abs((int)dummy.updateAndGetEnderPearlSeed());
+            boolean didPass = (seedResult % 16 < 10);
+            if (didPass) {
+                total_pearls++;
+            }
+            total_endermen++;
+        }
+        while (total_eyes < 5) {
+            int seedResult = Math.abs((int)dummy.updateAndGetEnderEyeSeed());
+            boolean didPass = (seedResult % 5 > 0);
+            if (!didPass) {
+                broken_eyes++;
+            }
+            total_eyes++;
+        }
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        player.sendChatMessage(String.format("Current rates on this seed: Blaze rates are %d/%d, Endermen "
+                        + "rates are %d/%d, eye breaks are %d/%d",
+                total_blazerods, total_blazes, total_pearls, total_endermen, broken_eyes, total_eyes));
+        world.playSound(player.x, player.y, player.z, "ambient.cave.cave", 100.0F, 10.0F);
     }
 
     public long getEnderEyeSeed() {
