@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkSection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,10 +23,12 @@ public class TempleMobSpawnMixin {
         int x = blockPos.getX() & 15;
         int y = blockPos.getY();
         int z = blockPos.getZ() & 15;
-        int skyLight = ((ChunkSectionAccessor)chunk).getChunkSections()[y >> 4].getSkyLight(x, y & 15, z);
-        if (standingBlock == Blocks.SANDSTONE && skyLight != 15) {
-            System.out.println(blockPos);
-            cir.setReturnValue(false);
+        ChunkSection chunkSection = ((ChunkSectionAccessor)chunk).getChunkSections()[y >> 4];
+        if (chunkSection != null && standingBlock == Blocks.SANDSTONE) {
+            if (chunkSection.getSkyLight(x, y & 15, z) != 15) {
+                System.out.println(blockPos);
+                cir.setReturnValue(false);
+            }
         }
     }
 }
