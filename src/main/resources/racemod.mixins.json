@@ -9,11 +9,14 @@
     "EyeOfEnderMixin",
     "LakesMixin",
     "LevelPropertiesMixin",
+    "CaveMixin",
     "MobDropsMixin",
     "RavineMixin",
     "SpiralStaircaseMixin",
     "StartPieceMixin",
-    "TitleScreenMixin"
+    "TitleScreenMixin",
+    "ChunkSectionAccessor",
+    "TempleMobSpawnMixin"
   ],
   "client": [
   ],
