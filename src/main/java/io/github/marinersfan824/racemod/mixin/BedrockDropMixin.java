@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,11 +26,13 @@ public abstract class BedrockDropMixin extends Entity {
 
     @Inject(method = "dropStack", at = @At("HEAD"))
     public void dropItemOverride(ItemStack stack, boolean bl, boolean incrementStats, CallbackInfoReturnable<ItemEntity> cir) {
-        if (stack != null) {
-            if (stack.getItem() == Item.fromBlock(Blocks.BEDROCK)) {
-                RNGStreamGenerator.tellPlayerInitialRates(this.world);
-            } else if (stack.getItem() == Item.fromBlock(Blocks.END_PORTAL_FRAME)) {
-                RNGStreamGenerator.tellPlayerCurrentRates(this.world);
+        if (!this.world.isClient) {
+            if (stack != null) {
+                if (stack.getItem() == Item.fromBlock(Blocks.BEDROCK)) {
+                    RNGStreamGenerator.tellPlayerInitialRates(((ServerWorld)this.world).getServer().getWorld());
+                } else if (stack.getItem() == Item.fromBlock(Blocks.END_PORTAL_FRAME)) {
+                    RNGStreamGenerator.tellPlayerCurrentRates(((ServerWorld)this.world).getServer().getWorld());
+                }
             }
         }
     }
