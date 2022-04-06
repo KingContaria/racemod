@@ -5,6 +5,7 @@ import io.github.marinersfan824.racemod.RNGStreamGenerator;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.BlazeEntity;
 import net.minecraft.entity.mob.EndermanEntity;
+import net.minecraft.entity.mob.SpiderEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -23,7 +24,7 @@ public abstract class MobDropsMixin {
 
     @Redirect(method = "onKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;dropLoot(ZI)V"))
     protected void dropLoot(LivingEntity entity, boolean allowDrops, int lootingMultiplier) {
-        MinecraftServer server = ((ServerWorld)entity.getWorld()).getServer();
+        MinecraftServer server = ((ServerWorld) entity.getWorld()).getServer();
         RNGStreamGenerator rngStreamGenerator = ((ILevelProperties) server.getWorld().getLevelProperties()).getRngStreamGenerator();
         if (entity instanceof EndermanEntity) {
             int seedResult = (int) rngStreamGenerator.updateAndGetEnderPearlSeed();
@@ -43,7 +44,6 @@ public abstract class MobDropsMixin {
                 entity.dropItem(item, 1);
             }
         } else if (entity instanceof ChickenEntity) {
-
             int seedResult = (int) rngStreamGenerator.updateAndGetFeatherSeed();
             int numRolls = 2 + lootingMultiplier;
             int numDrops = 0;
@@ -86,6 +86,26 @@ public abstract class MobDropsMixin {
             for (i = 0; i < numDrops; i++) {
                 ItemStack item = new ItemStack(Items.BLAZE_ROD, 1, 0);
                 entity.dropItem(item, 1);
+            }
+        } else if (entity instanceof SpiderEntity) {
+            int seedResult = (int) rngStreamGenerator.updateAndGetStringSeed();
+            int numRolls = 2 + lootingMultiplier;
+            int numDrops = 0;
+            int j;
+            for (j = 0; j < numRolls; j++) {
+                boolean passed = (seedResult % 16 < 8);
+
+                if (passed) {
+                    numDrops++;
+                }
+                seedResult /= 16;
+            }
+            for (j = 0; j < numDrops; j++) {
+                ItemStack item = new ItemStack(Items.STRING, 1, 0);
+                entity.dropItem(item, 1);
+            }
+            if (allowDrops && seedResult % 3 == 0) {
+                entity.dropItem(Items.SPIDER_EYE, 1);
             }
         } else {
             this.dropLoot(this.playerHitTimer > 0, lootingMultiplier);
