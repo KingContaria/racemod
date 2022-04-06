@@ -16,7 +16,8 @@
     "StartPieceMixin",
     "TitleScreenMixin",
     "ChunkSectionAccessor",
-    "TempleMobSpawnMixin"
+    "TempleMobSpawnMixin",
+    "FlintMixin"
   ],
   "client": [
   ],

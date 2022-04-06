@@ -2,6 +2,7 @@ package io.github.marinersfan824.racemod.mixin;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.StandingSignBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -19,16 +20,9 @@ public class TempleMobSpawnMixin {
         Entity thisEntity = (Entity) (Object) this;
         BlockPos blockPos = new BlockPos(thisEntity.x, thisEntity.getBoundingBox().minY, thisEntity.z);
         Block standingBlock = thisEntity.world.getBlockAt(blockPos.down());
-        Chunk chunk = thisEntity.world.getChunk(blockPos);
-        int x = blockPos.getX() & 15;
-        int y = blockPos.getY();
-        int z = blockPos.getZ() & 15;
-        ChunkSection chunkSection = ((ChunkSectionAccessor)chunk).getChunkSections()[y >> 4];
-        if (chunkSection != null && standingBlock == Blocks.SANDSTONE) {
-            if (chunkSection.getSkyLight(x, y & 15, z) != 15) {
-                System.out.println(blockPos);
-                cir.setReturnValue(false);
-            }
+        long timeOfDay = thisEntity.world.getTimeOfDay() % 24000;
+        if ((standingBlock == Blocks.SANDSTONE || standingBlock == Blocks.WOOL || standingBlock == Blocks.TERRACOTTA) && timeOfDay < 13000) {
+            cir.setReturnValue(false);
         }
     }
 }
