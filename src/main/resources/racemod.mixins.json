@@ -17,7 +17,10 @@
     "TitleScreenMixin",
     "ChunkSectionAccessor",
     "TempleMobSpawnMixin",
-    "FlintMixin"
+    "FlintMixin",
+    "BiomeMixin",
+    "NetherFortressStructureMixin",
+    "SurfaceChunkGeneratorMixin"
   ],
   "client": [
   ],
