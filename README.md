@@ -1,5 +1,5 @@
 # racemod
-A 1.7 and 1.8 tournament mod that makes major sources of RNG consistent between different players playing on the same seed. This is the official mod for Spinnaker's Pre1.9 Tournament and Minecraft Relay Cup 2.
+A 1.7 tournament mod that makes major sources of RNG consistent between different players playing on the same seed. This is the official mod for Spinnaker's Pre1.9 Tournament and Minecraft Relay Cup 2.
 
 - Endermen, blaze, spider, and chicken drop rates are all standardised
 - Eye breaks are standardised
