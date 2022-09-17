@@ -20,7 +20,7 @@ public class RNGStreamGenerator {
         */
         rngSeeds = new HashMap() {
             {
-            //  the first 3 seeds use the same XOR salt as sharpie did in the original forge racemod FeelsStrongMan
+                //  the first 3 seeds use the same XOR salt as sharpie did in the original forge racemod FeelsStrongMan
                 put("blazeRodSeed", worldSeed ^ 64711520272L);
                 put("enderPearlSeed", worldSeed ^ 286265360L);
                 put("featherSeed", worldSeed ^ 1229781838466121744L);
@@ -30,6 +30,8 @@ public class RNGStreamGenerator {
                 put("woolSeed", worldSeed ^ 0x7F12468038952L);
                 put("porkChopSeed", worldSeed ^ 64182641824614L);
                 put("beefSeed", worldSeed ^ 0xFF97FD1823L);
+                put("eyeTradeSeed", worldSeed ^ 0xFD66D1812L);
+                put("bookTradeSeed", worldSeed ^ 9812173826432342L);
             }
         };
     }
@@ -85,6 +87,8 @@ public class RNGStreamGenerator {
                 put("woolSeed", main.getSeed("woolSeed"));
                 put("porkChopSeed", main.getSeed("porkChopSeed"));
                 put("beefSeed", main.getSeed("beefSeed"));
+                put("eyeTradeSeed", main.getSeed("eyeTradeSeed"));
+                put("bookTradeSeed", main.getSeed("bookTradeSeed"));
             }
         };
         int total_blazerods = 0;
@@ -99,6 +103,8 @@ public class RNGStreamGenerator {
         int total_gravel = 0;
         int total_string = 0;
         int total_spiders = 0;
+        int eyeTrade;
+        int bookTrade;
         while (total_blazerods < 7) {
             int seedResult = (int) dummy.getAndUpdateSeed("blazeRodSeed");
             boolean didPass = (seedResult % 16 < 8);
@@ -158,11 +164,20 @@ public class RNGStreamGenerator {
             }
             total_spiders++;
         }
+        {
+            int seedResult = (int) dummy.getAndUpdateSeed("eyeTradeSeed");
+            eyeTrade = 7 + seedResult % 4;
+        }
+        {
+            int seedResult = (int) dummy.getAndUpdateSeed("bookTradeSeed");
+            bookTrade = 11 + seedResult % 2;
+        }
+
         ClientPlayerEntity player = MinecraftClient.getInstance().field_3805;
         player.addMessage(new TranslatableText(String.format("Current rates on this seed: Blaze rates are %d/%d, Endermen "
-                        + "rates are %d/%d, eye breaks are %d/%d, feather rates are %d/%d, flint rates are %d/%d, string rates are %d/%d",
+                        + "rates are %d/%d, eye breaks are %d/%d, feather rates are %d/%d, flint rates are %d/%d, string rates are %d/%d, eye trade is %d emeralds, book trade is %d emeralds",
                 total_blazerods, total_blazes, total_pearls, total_endermen, broken_eyes, total_eyes, total_feathers, total_chickens, total_flint, total_gravel,
-                total_string, total_spiders
+                total_string, total_spiders, eyeTrade, bookTrade
         )));
         world.playSound(player.x, player.y, player.z, "ambient.weather.thunder", 1000.0F, 0.8F + 0.2F);
     }
